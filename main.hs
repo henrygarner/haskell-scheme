@@ -32,8 +32,7 @@ parseAtom = do first <- letter <|> symbol
                  _ -> Atom atom
 
 parseNumber :: Parser LispVal
-parseNumber = do x <- many1 digit
-                 (return . Number . read) x
+parseNumber = do many1 digit >>= return . Number . read
 
 parseExpr :: Parser LispVal
 parseExpr = parseAtom
