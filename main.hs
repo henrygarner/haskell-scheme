@@ -16,9 +16,14 @@ data LispVal = Atom String
              | String String
              | Bool Bool
 
+escapedChars :: Parser Char
+escapedChars = do char '\\' -- a backslash
+                  x <- oneOf "\\\"" -- either backslash or doublequote
+                  return x -- return the escaped character
+
 parseString :: Parser LispVal
 parseString = do char '"'
-                 x <- many (noneOf "\"")
+                 x <- many $ escapedChars <|> noneOf "\"\\"
                  char '"'
                  return $ String x
 
